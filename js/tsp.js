@@ -461,19 +461,10 @@ function onSolveCallback(myTsp) {
     pathStr += "Trip length: " + formatLength(getTotalDistance(dir)) + 
       " (" + formatLengthMiles(getTotalDistance(dir)) + ")</p>";
     document.getElementById("path").innerHTML = pathStr;
-    document.getElementById("exportDataButton").innerHTML = "<input id='rawButton' class='calcButton' type='button' value='Toggle raw path output' onClick='toggle(\"exportData\"); document.getElementById(\"outputList\").select();'>";
-    var durStr = "<input id='csvButton' class='calcButton' type='button' value='Toggle csv durations matrix' onClick='toggle(\"durationsData\");'>";
-    document.getElementById("durations").innerHTML = durStr;
-    document.getElementById("exportLabelButton").innerHTML = "<input id='rawLabelButton' class='calcButton' type='button' value='Raw path with labels' onClick='toggle(\"exportLabelData\"); document.getElementById(\"outputLabelList\").select();'>"
-    document.getElementById("exportAddrButton").innerHTML = "<input id='rawAddrButton' class='calcButton' type='button' value='Optimal address order' onClick='toggle(\"exportAddrData\"); document.getElementById(\"outputAddrList\").select();'>"
-    document.getElementById("exportOrderButton").innerHTML = "<input id='rawOrderButton' class='calcButton' type='button' value='Optimal numeric order' onClick='toggle(\"exportOrderData\"); document.getElementById(\"outputOrderList\").select();'>"
 
     var formattedDirections = formatDirections(dir, mode);
     document.getElementById("routeDrag").innerHTML = formattedDirections[0];
     document.getElementById("my_textual_div").innerHTML = formattedDirections[1];
-    document.getElementById("garmin").innerHTML = createGarminLink(dir);
-    document.getElementById("tomtom").innerHTML = createTomTomLink(dir);
-    document.getElementById("exportGoogle").innerHTML = "<input id='googleButton' value='View in Google Maps' type='button' class='calcButton' onClick='window.open(\"" + createGoogleLink(dir) + "\");' />";
     document.getElementById("reverseRoute").innerHTML = "<input id='reverseButton' value='Reverse' type='button' class='calcButton' onClick='reverseRoute()' />";
     jQuery('#reverseButton').button();
     jQuery('#rawButton').button();

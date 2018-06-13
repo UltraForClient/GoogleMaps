@@ -378,23 +378,23 @@
 
       // If this is the last node:
       if (currStep == numSteps) {
-	currLen += dur[currNode][lastNode];
-	currPath[currStep] = lastNode;
-	bestTrip = currLen;
-	for (var i = 0; i <= numSteps; ++i) {
+    currLen += dur[currNode][lastNode];
+    currPath[currStep] = lastNode;
+    bestTrip = currLen;
+    for (var i = 0; i <= numSteps; ++i) {
 	  bestPath[i] = currPath[i];
-	}
+    }
       } else {
 
-	// Try all possible routes:
-	for (var i = 1; i < numToVisit; ++i) {
+    // Try all possible routes:
+    for (var i = 1; i < numToVisit; ++i) {
 	  if (!visited[i]) {
 	    visited[i] = true;
 	    currPath[currStep] = i;
 	    tspBruteForce(mode, i, currLen+dur[currNode][i], currStep+1);
 	    visited[i] = false;
 	  }
-	}
+    }
       }
     }
   }
