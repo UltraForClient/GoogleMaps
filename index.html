@@ -12,8 +12,6 @@
 </head>
 
 <body>
-<div id="fb-root"></div>
-<h2>OptiMap - Fastest Roundtrip Solver</h2>
 <table class='mainTable'>
     <tr>
         <td class='left' style='vertical-align: top'>
@@ -28,7 +26,7 @@
                     <div>
                         <h3>Zmień kolejność</h3>
                         <div id="routeDrag"></div>
-                        <div id="reverseRoute"></div>
+                        <button id='reverse-button' style="display: none" class='calc-button'>Przywróć optymalną kolejność</button>
                     </div>
                 </div>
 
@@ -41,24 +39,6 @@
         </td>
     </tr>
 </table>
-
-<!-- Hidden stuff -->
-<div id="bulkLoader_hidden" style="visibility: hidden;">
-    <form name="listOfLocations" onSubmit="clickedAddList(); return false;">
-        <textarea name="inputList" rows="10" cols="70">One destination per line</textarea><br>
-        <input type="button" value="Add list of locations" onClick="clickedAddList()">
-    </form>
-</div>
-<div id="exportData_hidden" style="visibility: hidden;"></div>
-<div id="exportLabelData_hidden" style="visibility: hidden;"></div>
-<div id="exportAddrData_hidden" style="visibility: hidden;"></div>
-<div id="exportOrderData_hidden" style="visibility: hidden;"></div>
-<div id="durationsData_hidden" style="visibility: hidden;"></div>
-
-<div id="dialogProgress" title="Calculating route...">
-    <div id="progressBar"></div>
-</div>
-
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
 <script type="application/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
@@ -84,6 +64,9 @@
                     break;
                 case 'button3':
                     startOver();
+                    break;
+                case 'reverse-button':
+                    reverseRoute();
                     break;
             }
         })
@@ -116,23 +99,31 @@
         });
         jQuery('.myMap').height(jQuery(window).height() - 100);
     });
-
-    // (function () {
-    //     var po = document.createElement('script');
-    //     po.type = 'text/javascript';
-    //     po.async = true;
-    //     po.src = 'https://apis.google.com/js/plusone.js';
-    //     var s = document.getElementsByTagName('script')[0];
-    //     s.parentNode.insertBefore(po, s);
-    // })();
-
 </script>
 
 <script>
-    google.maps.event.addListener(map, 'click', event => {
-        const lat = event.latLng.lat();
-        const lng = event.latLng.lng();
-        addAddress(lat + ', ' + lng)
+    const addPointButton = document.querySelector('.add-point');
+
+    addPointButton.addEventListener('click', e => {
+        if(addPointButton.getAttribute('data-toggle') === 'true') {
+            addPointButton.setAttribute('data-toggle', 'false');
+            gebMap.setOptions({draggableCursor: ''});
+        } else {
+            addPointButton.setAttribute('data-toggle', 'true');
+            gebMap.setOptions({draggableCursor: 'cell'});
+        }
+    });
+
+    google.maps.event.addListener(gebMap, 'click', event => {
+        if(addPointButton.getAttribute('data-toggle') === 'true') {
+            console.log('asd')
+            const lat = event.latLng.lat();
+            const lng = event.latLng.lng();
+            addAddress(lat + ', ' + lng);
+
+            gebMap.setOptions({draggableCursor: ''});
+            addPointButton.setAttribute('data-toggle', 'false')
+        }
     });
 </script>
 </body>

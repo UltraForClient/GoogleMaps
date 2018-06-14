@@ -76,6 +76,7 @@ function formatDirections(gdir, mode) {
     var addr = tsp.getAddresses();
     var labels = tsp.getLabels();
     var order = tsp.getOrder();
+    document.querySelector('#reverse-button').style.display = 'block';
     var retStr = "<table class='gebddir' border=0 cell-spacing=0>\n";
     var dragStr = "Drag to re-order stops:<br><ul class='unsortable'>";
     var retArr = new Array();
@@ -84,8 +85,7 @@ function formatDirections(gdir, mode) {
         var colour = "g";
         var number = i + 1;
         retStr += "\t<tr class='heading'><td class='heading' width=40>"
-            + "<div class='centered-directions'><img src='newicons/black"
-            + number + ".png'></div></td>"
+            + "<div class='centered-directions'>" + number + "</div></td>"
             + "<td class='heading'><div class='centered-directions'>";
         var headerStr;
         if (labels[order[i]] != null && labels[order[i]] != "") {
@@ -99,8 +99,7 @@ function formatDirections(gdir, mode) {
         }
         dragStr += "<li id='" + i + "' class='ui-state-"
             + (i ? "default" : "disabled") + "'>"
-            + "<table class='dragTable'><tr><td class='left'><img src='newicons/black"
-            + number + ".png' /></td><td class='middle'>" + headerStr + "</td><td class='right'>"
+            + "<table class='dragTable'><tr><td class='left'>" + number + "</td><td class='middle'>" + headerStr + "</td><td class='right'>"
             + (i ? "<button id='dragClose" + i + "' value='" + i + "'></button>" : "")
             + "</td></tr></table></li>";
         if (i == 0) {
@@ -130,11 +129,10 @@ function formatDirections(gdir, mode) {
             headerStr = latLng.toString();
         }
         dragStr += "<li id='" + 0 + "' class='ui-state-disabled'>"
-            + "<table class='dragTable'><tr><td><img src='newicons/black"
-            + 1 + ".png' /></td><td>" + headerStr
+            + "<table class='dragTable'><tr><td>1 - Powrót</td><td>" + headerStr
             + "</td></tr></table></li>";
         retStr += "\t<tr class='heading'><td class='heading'>"
-            + "<div class='centered-directions'><img src='newicons/black1.png'></div></td>"
+            + "<div class='centered-directions'></div></td>"
             + "<td class='heading'>"
             + "<div class='centered-directions'>"
             + headerStr + "</div></td></tr>\n";
@@ -149,12 +147,10 @@ function formatDirections(gdir, mode) {
             headerStr = addr[order[gdir.legs.length]];
         }
         dragStr += "<li id='" + gdir.legs.length + "' class='ui-state-disabled'>"
-            + "<table class='dragTable'><tr><td><img src='newicons/black"
-            + (gdir.legs.length + 1) + ".png' /></td><td>"
+            + "<table class='dragTable'><tr><td>" + (gdir.legs.length + 1) + "</td><td>"
             + headerStr + "</td></tr></table></li>";
         retStr += "\t<tr class='heading'><td class='heading'>"
-            + "<div class='centered-directions'><img src='newicons/black"
-            + (gdir.legs.length + 1) + ".png'></div></td>"
+            + "<div class='centered-directions'>" + (gdir.legs.length + 1) + "</div></td>"
             + "<td class='heading'>"
             + "<div class='centered-directions'>"
             + headerStr + "</div></td></tr>\n";
@@ -171,11 +167,8 @@ function onProgressCallback(tsp) {
 }
 
 function drawMarker(latlng, addr, label, num) {
-    var icon;
-    icon = new google.maps.MarkerImage("newicons/red" + (num + 1) + ".png");
     var marker = new google.maps.Marker({
         position: latlng,
-        icon: icon,
         map: gebMap
     });
     google.maps.event.addListener(marker, 'click', function (event) {
@@ -227,9 +220,9 @@ function initMap(center, zoom, div) {
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     gebMap = new google.maps.Map(div, myOptions);
-    google.maps.event.addListener(gebMap, "click", function (event) {
-        tsp.addWaypoint(event.latLng, addWaypointSuccessCallback);
-    });
+    // google.maps.event.addListener(gebMap, "click", function (event) {
+    //     tsp.addWaypoint(event.latLng, addWaypointSuccessCallback);
+    // });
 }
 
 function loadAtStart(lat, lng, zoom) {
@@ -281,6 +274,7 @@ function addAddressSuccessCallbackZoom(address, latlng) {
 }
 
 function addWaypointSuccessCallback(latlng) {
+
     if (latlng) {
         drawMarkers(false);
     }
@@ -367,7 +361,6 @@ function onSolveCallback(myTsp) {
 
     var formattedDirections = formatDirections(dir, mode);
     document.getElementById("routeDrag").innerHTML = formattedDirections[0];
-    document.getElementById("reverseRoute").innerHTML = "<input id='reverseButton' value='Reverse' type='button' class='calcButton' onClick='reverseRoute()' />";
     jQuery('#reverseButton').button();
     jQuery('#rawButton').button();
     jQuery('#rawLabelButton').button();
@@ -405,10 +398,9 @@ function onSolveCallback(myTsp) {
     // Add nice, numbered icons.
     if (mode == 1) {
         var myPt1 = dir.legs[0].start_location;
-        var myIcn1 = new google.maps.MarkerImage("newicons/black1.png");
         var marker = new google.maps.Marker({
             position: myPt1,
-            icon: myIcn1,
+            // icon: myIcn1,
             map: gebMap
         });
         markers.push(marker);
@@ -416,15 +408,10 @@ function onSolveCallback(myTsp) {
     for (var i = 0; i < dir.legs.length; ++i) {
         var route = dir.legs[i];
         var myPt1 = route.end_location;
-        var myIcn1;
-        if (i == dir.legs.length - 1 && mode == 0) {
-            myIcn1 = new google.maps.MarkerImage("newicons/black1.png");
-        } else {
-            myIcn1 = new google.maps.MarkerImage("newicons/black" + (i + 2) + ".png");
-        }
+
         var marker = new google.maps.Marker({
             position: myPt1,
-            icon: myIcn1,
+            // icon: myIcn1,
             map: gebMap
         });
         markers.push(marker);
@@ -448,9 +435,7 @@ function onSolveCallback(myTsp) {
     for (var i = 0; i < dir.legs.length; ++i) {
         bestPathLatLngStr += dir.legs[i].end_location.toString() + "\n";
     }
-    document.getElementById("exportData_hidden").innerHTML =
-        "<textarea id='outputList' rows='10' cols='40'>"
-        + bestPathLatLngStr + "</textarea><br>";
+
 
     // Raw path output with labels
     var labels = tsp.getLabels();
@@ -470,9 +455,6 @@ function onSolveCallback(myTsp) {
         }
         bestPathLabelStr += ": " + dir.legs[i].end_location.toString() + "\n";
     }
-    document.getElementById("exportLabelData_hidden").innerHTML =
-        "<textarea id='outputLabelList' rows='10' cols='40'>"
-        + bestPathLabelStr + "</textarea><br>";
 
     // Optimal address order
     var addrs = tsp.getAddresses();
@@ -492,18 +474,12 @@ function onSolveCallback(myTsp) {
         }
         bestPathAddrStr += "\n";
     }
-    document.getElementById("exportAddrData_hidden").innerHTML =
-        "<textarea id='outputAddrList' rows='10' cols='40'>"
-        + bestPathAddrStr + "</textarea><br>";
 
     // Optimal numeric order
     var bestOrderStr = "";
     for (var i = 0; i < order.length; ++i) {
         bestOrderStr += "" + (order[i] + 1) + "\n";
     }
-    document.getElementById("exportOrderData_hidden").innerHTML =
-        "<textarea id='outputOrderList' rows='10' cols='40'>"
-        + bestOrderStr + "</textarea><br>";
 
     var durationsMatrixStr = "";
     var dur = tsp.getDurations();
@@ -517,9 +493,6 @@ function onSolveCallback(myTsp) {
             }
         }
     }
-    document.getElementById("durationsData_hidden").innerHTML =
-        "<textarea name='csvDurationsMatrix' rows='10' cols='40'>"
-        + durationsMatrixStr + "</textarea><br>";
 }
 
 function clickedAddList() {

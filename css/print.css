@@ -184,18 +184,6 @@ div#leftPanel {
     display: none;
 }
 
-div#bulkLoader_hidden {
-    display: none;
-}
-
-div#exportData_hidden {
-    display: none;
-}
-
-div#durationsData_hidden {
-    display: none;
-}
-
 table.mainTable {
     width: 100%;
 }
