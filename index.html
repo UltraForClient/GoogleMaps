@@ -18,26 +18,23 @@
     <tr>
         <td class='left' style='vertical-align: top'>
             <div id="leftPanel">
-                <div id="accordion" style='width: 300pt'>
-                    <h3><a href="#" class='accHeader'>Destinations</a></h3>
+                <button class="add-point" data-toggle="false">Dodaj punkt zaznaczając na mapie</button>
                     <div>
                         <label for="addressStr">Add Location by Address:</label>
                         <input name="addressStr" id="addressStr" type="text">
                         <button onclick="addAddress(addressStr.value)">Add!</button>
                     </div>
 
-                    <h3><a href="#" class='accHeader'>Edit Route</a></h3>
                     <div>
+                        <h3>Zmień kolejność</h3>
                         <div id="routeDrag"></div>
                         <div id="reverseRoute"></div>
                     </div>
                 </div>
 
-                <input id="button1" class="calcButton" type="button" value="Calculate Fastest Roundtrip" onClick="directions(0)">
-                <input id="button2" class="calcButton" type="button" value="Calculate Fastest A-Z Trip" onClick="directions(1)">
-                <input id='button3' class="calcButton" type='button' value='Start Over Again' onClick='startOver()'>
-            </div>
-
+            <button id="button1" class="calc-button">Oblicz najszybszą trase do okoła</button>
+            <button id="button2" class="calc-button">Oblicz najszybszą trasę od pierwszego punktu do ostatniego</button>
+            <button id='button3' class="calc-button">Wyczyść mape</button>
         </td>
         <td class='right' style='vertical-align: top'>
             <div id="map" class="myMap"></div>
@@ -72,19 +69,25 @@
 <script type="text/javascript">
     jQuery.noConflict();
 
-    loadAtStart(50, 20, 6)
+    loadAtStart(50, 20, 6);
 
+    const actionButtons = document.querySelectorAll('.calc-button');
 
-    function toggle(divId) {
-        var divObj = document.getElementById(divId);
-        if (divObj.innerHTML == "") {
-            divObj.innerHTML = document.getElementById(divId + "_hidden").innerHTML;
-            document.getElementById(divId + "_hidden").innerHTML = "";
-        } else {
-            document.getElementById(divId + "_hidden").innerHTML = divObj.innerHTML;
-            divObj.innerHTML = "";
-        }
-    }
+    actionButtons.forEach(actionButton => {
+        actionButton.addEventListener('click', e => {
+            switch (e.target.id) {
+                case 'button1':
+                    directions(0);
+                    break;
+                case 'button2':
+                    directions(1);
+                    break;
+                case 'button3':
+                    startOver();
+                    break;
+            }
+        })
+    });
 
     jQuery(function () {
         jQuery("#accordion").accordion({
@@ -114,14 +117,14 @@
         jQuery('.myMap').height(jQuery(window).height() - 100);
     });
 
-    (function () {
-        var po = document.createElement('script');
-        po.type = 'text/javascript';
-        po.async = true;
-        po.src = 'https://apis.google.com/js/plusone.js';
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(po, s);
-    })();
+    // (function () {
+    //     var po = document.createElement('script');
+    //     po.type = 'text/javascript';
+    //     po.async = true;
+    //     po.src = 'https://apis.google.com/js/plusone.js';
+    //     var s = document.getElementsByTagName('script')[0];
+    //     s.parentNode.insertBefore(po, s);
+    // })();
 
 </script>
 
