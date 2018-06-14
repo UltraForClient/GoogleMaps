@@ -1,62 +1,20 @@
-/*
-Theme Name: OptiMap
-Theme URI: http://gebweb.net/optimap
-Description: The TSP Google Maps Optimizer Layout
-Version: 2.0
-*/
-
 body {
-    background: #fff;
-    border: none;
-    color: #333;
-    font-family: 'Lucida Grande', Verdana, Arial, Sans-Serif;
-}
-
-h1, h2, h3 {
-    font-family: 'Trebuchet MS', 'Lucida Grande', Verdana, Arial, Sans-Serif;
-    font-weight: bold;
-    text-align: left;
-}
-
-p {
-    text-align: left;
-    font-size: 10pt;
-}
-
-h1 {
-    font-size: 18pt;
-    text-align: left;
-    color: #0000a0;
-}
-
-h2 {
-    font-size: 20pt;
-    text-align: left;
-    color: #0000a0;
-}
-
-p a:visited {
-    color: #0000a0;
-}
-
-a {
-    color: #0000a0;
-    text-decoration: none;
-}
-
-a:hover {
-    color: #0000a0;
-    text-decoration: underline;
-}
-
-h1 {
-    padding-top: 70px;
     margin: 0;
 }
 
-h2 {
-    margin: 5px 0 15px 0;
+.container__maps {
+    display: flex;
 }
+
+.aside__maps {
+    width: 20%;
+}
+
+.main__maps {
+    width: 80%;
+}
+
+
 
 table.mainTable {
     width: 100%;
@@ -268,4 +226,22 @@ div.poll {
     background: #fdf5ce;
     border: 1px solid #fbd850;
     border-radius: 4px;
+}
+
+@media print {
+    .aside__maps, aside {
+        display: none!important;
+    }
+
+    .main__maps {
+        width: 100%!important;
+    }
+
+    body.print-map #path, .print-map #my_textual_div{
+        display: none!important;
+    }
+
+    body.print-route #map {
+        display: none!important;
+    }
 }

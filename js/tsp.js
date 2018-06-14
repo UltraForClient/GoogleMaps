@@ -13,7 +13,7 @@ var mode;
 var markers = new Array();  // Need pointers to all markers to clean up.
 var dirRenderer;  // Need pointer to path to clean up.
 
-/* Returns a textual representation of time in the format 
+/* Returns a textual representation of time in the format
  * "N days M hrs P min Q sec". Does not include days if
  * 0 days etc. Does not include seconds if time is more than
  * 1 hour.
@@ -300,6 +300,8 @@ function drawMarkers(updateViewport) {
 }
 
 function startOver() {
+    document.getElementById("my_textual_div").innerHTML = "";
+    document.getElementById("path").innerHTML = "";
     var center = gebMap.getCenter();
     var zoom = gebMap.getZoom();
     var mapDiv = gebMap.getDiv();
@@ -308,6 +310,7 @@ function startOver() {
 }
 
 function directions(m, walking, bicycling, avoidHighways, avoidTolls) {
+
     jQuery('#dialogProgress').dialog('open');
     mode = m;
     tsp.setAvoidHighways(avoidHighways);
@@ -355,12 +358,13 @@ function onSolveCallback(myTsp) {
     // Print shortest roundtrip data:
 
     var pathStr = "<p>Trip duration: " + formatTime(getTotalDuration(dir)) + "<br>";
-    pathStr += "Trip length: " + formatLength(getTotalDistance(dir)) +
-        " (" + formatLengthMiles(getTotalDistance(dir)) + ")</p>";
-    // document.getElementById("path").innerHTML = pathStr;
+    pathStr += "Trip length: " + formatLength(getTotalDistance(dir)) + 'asdasdasdasdasd' +
+        " (" + formatLength(getTotalDistance(dir)) + ")</p>";
+    document.getElementById("path").innerHTML = pathStr;
 
     var formattedDirections = formatDirections(dir, mode);
     document.getElementById("routeDrag").innerHTML = formattedDirections[0];
+    document.getElementById("my_textual_div").innerHTML = formattedDirections[1];
     jQuery('#reverseButton').button();
     jQuery('#rawButton').button();
     jQuery('#rawLabelButton').button();
@@ -436,7 +440,9 @@ function onSolveCallback(myTsp) {
         bestPathLatLngStr += dir.legs[i].end_location.toString() + "\n";
     }
 
-
+    document.getElementById("exportData_hidden").innerHTML =
+        "<textarea id='outputList' rows='10' cols='40'>"
+        + bestPathLatLngStr + "</textarea><br>";
     // Raw path output with labels
     var labels = tsp.getLabels();
     var order = tsp.getOrder();
@@ -455,7 +461,9 @@ function onSolveCallback(myTsp) {
         }
         bestPathLabelStr += ": " + dir.legs[i].end_location.toString() + "\n";
     }
-
+    document.getElementById("exportLabelData_hidden").innerHTML =
+        "<textarea id='outputLabelList' rows='10' cols='40'>"
+        + bestPathLabelStr + "</textarea><br>";
     // Optimal address order
     var addrs = tsp.getAddresses();
     var order = tsp.getOrder();
@@ -480,6 +488,10 @@ function onSolveCallback(myTsp) {
     for (var i = 0; i < order.length; ++i) {
         bestOrderStr += "" + (order[i] + 1) + "\n";
     }
+
+    document.getElementById("exportOrderData_hidden").innerHTML =
+        "<textarea id='outputOrderList' rows='10' cols='40'>"
+         + bestOrderStr + "</textarea><br>";
 
     var durationsMatrixStr = "";
     var dur = tsp.getDurations();

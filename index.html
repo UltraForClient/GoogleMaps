@@ -12,33 +12,36 @@
 </head>
 
 <body>
-<table class='mainTable'>
-    <tr>
-        <td class='left' style='vertical-align: top'>
-            <div id="leftPanel">
-                <button class="add-point" data-toggle="false">Dodaj punkt zaznaczając na mapie</button>
-                    <div>
-                        <label for="addressStr">Add Location by Address:</label>
-                        <input name="addressStr" id="addressStr" type="text">
-                        <button onclick="addAddress(addressStr.value)">Add!</button>
-                    </div>
+<div class="container__maps">
+    <aside class="aside__maps">
+        <button class="add-point" data-toggle="false">Dodaj punkt zaznaczając na mapie</button>
+        <div>
+            <label for="addressStr">Add Location by Address:</label>
+            <input name="addressStr" id="addressStr" type="text">
+            <button onclick="addAddress(addressStr.value)">Add!</button>
+        </div>
 
-                    <div>
-                        <h3>Zmień kolejność</h3>
-                        <div id="routeDrag"></div>
-                        <button id='reverse-button' style="display: none" class='calc-button'>Przywróć optymalną kolejność</button>
-                    </div>
-                </div>
+        <div>
+            <h3>Zmień kolejność</h3>
+            <div id="routeDrag"></div>
+            <button id='reverse-button' style="display: none" class='calc-button'>Przywróć optymalną kolejność</button>
+        </div>
 
-            <button id="button1" class="calc-button">Oblicz najszybszą trase do okoła</button>
-            <button id="button2" class="calc-button">Oblicz najszybszą trasę od pierwszego punktu do ostatniego</button>
-            <button id='button3' class="calc-button">Wyczyść mape</button>
-        </td>
-        <td class='right' style='vertical-align: top'>
-            <div id="map" class="myMap"></div>
-        </td>
-    </tr>
-</table>
+        <button id="button1" class="calc-button">Oblicz najszybszą trase do okoła</button>
+        <button id="button2" class="calc-button">Oblicz najszybszą trasę od pierwszego punktu do ostatniego</button>
+        <button id="button3" class="calc-button">Wyczyść mape</button>
+
+        <button id="print-map"   class="calc-button">Drukuj map</button>
+        <button id="print-route" class="calc-button">Drukuj opis drogi</button>
+        <button id="print"       class="calc-button">Drukuj całą strone</button>
+    </aside>
+    <main class="main__maps">
+        <div id="map" class="myMap"></div>
+        <div id="path" class="pathdata"></div>
+        <div id="my_textual_div"></div>
+    </main>
+</div>
+
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
 <script type="application/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
@@ -57,16 +60,36 @@
         actionButton.addEventListener('click', e => {
             switch (e.target.id) {
                 case 'button1':
-                    directions(0);
+                    if(tsp.getAddresses().length > 1) {
+                        directions(0);
+                    } else {
+                        alert('Dodaj chociaż dwa adresy')
+                    }
                     break;
                 case 'button2':
-                    directions(1);
+                    if(tsp.getAddresses().length > 1) {
+                        directions(1);
+                    } else {
+                        alert('Dodaj chociaż dwa adresy')
+                    }
                     break;
                 case 'button3':
                     startOver();
                     break;
                 case 'reverse-button':
                     reverseRoute();
+                    break;
+                case 'print-map':
+                    document.body.classList.add(e.target.id);
+                    window.print();
+                    break;
+                case 'print-route':
+                    document.body.classList.add(e.target.id);
+                    window.print();
+                    break;
+                case 'print':
+                    document.body.classList.add(e.target.id);
+                    window.print();
                     break;
             }
         })
@@ -116,15 +139,15 @@
 
     google.maps.event.addListener(gebMap, 'click', event => {
         if(addPointButton.getAttribute('data-toggle') === 'true') {
-            console.log('asd')
             const lat = event.latLng.lat();
             const lng = event.latLng.lng();
             addAddress(lat + ', ' + lng);
-
             gebMap.setOptions({draggableCursor: ''});
             addPointButton.setAttribute('data-toggle', 'false')
         }
     });
+
 </script>
 </body>
 </html>
+
